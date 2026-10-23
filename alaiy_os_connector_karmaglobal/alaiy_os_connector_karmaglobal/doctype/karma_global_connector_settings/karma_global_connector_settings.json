@@ -1,0 +1,106 @@
+{
+ "creation": "2026-07-20 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "is_enabled",
+  "sb_connection",
+  "kg_api_url",
+  "kg_api_key",
+  "kg_api_secret",
+  "kg_supplier",
+  "sb_schedule",
+  "kg_catalogue_sync_interval",
+  "kg_inventory_sync_interval"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "label": "Enable Karma Global"
+  },
+  {
+   "fieldname": "sb_connection",
+   "fieldtype": "Section Break",
+   "label": "API Connection"
+  },
+  {
+   "description": "Karma Global site, e.g. https://thealtomoda.os.alaiy.com",
+   "fieldname": "kg_api_url",
+   "fieldtype": "Data",
+   "label": "API URL",
+   "reqd": 1
+  },
+  {
+   "fieldname": "kg_api_key",
+   "fieldtype": "Data",
+   "label": "API Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "kg_api_secret",
+   "fieldtype": "Password",
+   "label": "API Secret",
+   "reqd": 1
+  },
+  {
+   "description": "Supplier that Karma Global's Supplier Products and Purchase Orders belong to.",
+   "fieldname": "kg_supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sb_schedule",
+   "fieldtype": "Section Break",
+   "label": "Sync Schedule"
+  },
+  {
+   "default": "Daily",
+   "description": "Products changed at Karma since the last catalogue sync.",
+   "fieldname": "kg_catalogue_sync_interval",
+   "fieldtype": "Select",
+   "label": "Catalogue Sync Interval",
+   "options": "Disabled\n5 min\n15 min\n30 min\n60 min\nDaily",
+   "reqd": 1
+  },
+  {
+   "default": "15 min",
+   "description": "Stock and price of every pulled size.",
+   "fieldname": "kg_inventory_sync_interval",
+   "fieldtype": "Select",
+   "label": "Inventory Sync Interval",
+   "options": "Disabled\n5 min\n15 min\n30 min\n60 min\nDaily",
+   "reqd": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Alaiy Os Connector Karmaglobal",
+ "name": "Karma Global Connector Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0,
+ "issingle": 1
+}

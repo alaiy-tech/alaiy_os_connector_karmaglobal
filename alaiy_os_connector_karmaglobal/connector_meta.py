@@ -1,0 +1,18 @@
+connector_meta = {
+    "connector_id": "karmaglobal",
+    "connector_name": "Karma Global",
+    "connector_app": "alaiy_os_connector_karmaglobal",
+    "connector_type": "supplier",
+    "description": "Pulls Karma Global's catalogue and stock into Supplier Products, checks live stock and places drop-ship orders.",
+    "icon": "shirt",
+    "icon_url": "",
+    "settings_doctype": "Karma Global Connector Settings",
+    "test_method": "alaiy_os_connector_karmaglobal.api.test_connection.test_connection",
+    "sync_categories_method": "alaiy_os_connector_karmaglobal.api.sync.trigger_catalogue_sync",
+    "sync_items_method": "alaiy_os_connector_karmaglobal.api.sync.trigger_inventory_sync",
+    "sync_status_method": "alaiy_os_connector_karmaglobal.api.sync.get_sync_status",
+    "sync_categories_label": "Catalogue",
+    "sync_items_label": "Inventory",
+    "is_enabled": 0,
+    "connection_status": "untested",
+}
