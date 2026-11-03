@@ -18,8 +18,8 @@ rounding. The questions in section 1 about that price are therefore the most imp
 
 ## 1. Questions about `billing_price`
 
-1. **What is in it?** We read it as Karma's B2B price to Alaiy, landed in India: Karma's cost from The
-   Corner, plus Karma's margin, FX, first-mile freight, insurance and customs duty. Please confirm, and
+1. **What is in it?** We read it as Karma's B2B price to Alaiy, landed in India: Karma's cost from its own
+   supplier, plus Karma's margin, FX, first-mile freight, insurance and customs duty. Please confirm, and
    say whether anything is left out, such as import IGST.
 2. **Which cost does it start from?** The pricing requirements say Karma's cost is CloudStore's
    `sale_price` (equal to `props.buy_price` × 1.2), and that `stock_price` is the retail price. The CloudStore
