@@ -25,6 +25,9 @@ scheduler_events = {
     }
 }
 
+# Asked by alaiy_os_commerce for the daily Full Pull of this supplier's whole catalogue.
+supplier_catalogue_pull = ["alaiy_os_connector_karmaglobal.karmaglobal.catalogue.pull"]
+
 # Asked by alaiy_os_commerce before it takes an order with Karma Global drop-ship lines.
 supplier_stock_lookup = ["alaiy_os_connector_karmaglobal.karmaglobal.orders.get_stock"]
 
