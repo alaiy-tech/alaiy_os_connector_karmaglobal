@@ -49,6 +49,14 @@ class TestCataloguePull(unittest.TestCase):
         self.assertEqual([c.args[1]["start"] for c in client.call.call_args_list], [0, 2])
         self.assertTrue(all(c.args[0] == "get_catalogue" for c in client.call.call_args_list))
 
+    def test_a_page_karma_caps_below_the_asked_size_skips_nothing(self):
+        # Asked for 3 a page, Karma returns 2: the next read must start at 2, not 3.
+        pages = [_page(["KG-1", "KG-2"], 4), _page(["KG-3", "KG-4"], 4)]
+        with patch.object(catalogue, "PULL_PAGE", 3):
+            result, client, _ = self._run(pages=pages)
+        self.assertEqual([r["supplier_product_id"] for r in result], ["KG-1", "KG-2", "KG-3", "KG-4"])
+        self.assertEqual([c.args[1]["start"] for c in client.call.call_args_list], [0, 2])
+
     def test_an_empty_catalogue_is_an_empty_answer_not_none(self):
         result, _, _ = self._run(pages=[_page([], 0)])
         self.assertEqual(result, [])

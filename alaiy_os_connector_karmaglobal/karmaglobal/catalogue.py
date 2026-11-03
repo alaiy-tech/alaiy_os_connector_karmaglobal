@@ -39,6 +39,8 @@ def pull(supplier, dry_run=False):
         page = client.call("get_catalogue", {"page_length": PULL_PAGE, "start": start})
         for product in page["products"]:
             records.extend(size_records(product))
-        start += PULL_PAGE
+        # Move on by what Karma returned, not what was asked: a page Karma caps below PULL_PAGE would
+        # otherwise skip products, and Commerce sets the stock of a missing product to 0.
+        start += len(page["products"])
         if not page["products"] or start >= page["total"]:
             return records
