@@ -6,6 +6,7 @@ import math
 import frappe
 from alaiy_os_commerce.alaiy_os_commerce.doctype.supplier_product.supplier_product import get_existing_names
 from alaiy_os_commerce.api.supplier_products import MAX_BATCH, upsert_supplier_products
+from alaiy_os_commerce.pricing_data import normalise_hs_code
 from frappe.utils import add_to_date, flt, now_datetime
 
 from alaiy_os_connector_karmaglobal.karmaglobal.client import KarmaClient
@@ -16,7 +17,7 @@ INVENTORY_PAGE = 1000
 # Karma's clock may run in another time zone; re-reading a day is cheap since unchanged rows are skipped.
 MODIFIED_OVERLAP_HOURS = 24
 # Cloudstore's internal labels, or already sent as real fields.
-EXCLUDED_SPECS = {"Season", "Colors", "Interlem Description", "Size Scale"}
+EXCLUDED_SPECS = {"Season", "Colors", "Interlem Description", "Size Scale", "HS Code"}
 
 
 def get_or_create_log(sync_type, trigger, log_name=None):
@@ -118,6 +119,8 @@ def size_records(product):
         if a.get("value") and a.get("label") not in EXCLUDED_SPECS:
             specs.setdefault(a["label"], a["value"])
     season = next((a["value"] for a in product.get("attributes") or [] if a.get("label") == "Season"), None)
+    # Commerce rejects a size whose HS code has too few digits, so send only a usable one.
+    hs_code = normalise_hs_code(product.get("hs_code"))
 
     records = []
     for v in product["variants"]:
@@ -134,6 +137,8 @@ def size_records(product):
             "specs": {**specs, **{k: val for k, val in (("Size", v.get("size")), ("Barcode", v.get("barcode"))) if val}},
             "images": product.get("images") or None,
         }
+        if hs_code:
+            record["hs_code"] = hs_code
         records.append(_priced(record, v, product["currency"]))
     return records
 
