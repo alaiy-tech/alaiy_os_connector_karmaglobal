@@ -1,3 +1,26 @@
+# Columns of Karma Global Sync Log, named the way the Connector Health page reads them.
+_LOG_FIELDS = {
+    "processed": "items_processed",
+    "changed": ["items_created", "items_updated"],
+    "failed": "items_failed",
+    "error": "error_message",
+}
+
+
+def _health(key, label, sync_type, interval_setting):
+    return {
+        "key": key,
+        "label": label,
+        "direction": "pull",
+        "log_doctype": "Karma Global Sync Log",
+        "log_filter": {"sync_type": sync_type},
+        "fields": _LOG_FIELDS,
+        "interval_setting": interval_setting,
+        "scheduled": True,
+        "expects_rows": True,
+    }
+
+
 connector_meta = {
     "connector_id": "karmaglobal",
     "connector_name": "Karma Global",
@@ -15,4 +38,8 @@ connector_meta = {
     "sync_items_label": "Inventory",
     "is_enabled": 0,
     "connection_status": "untested",
+    "health": [
+        _health("catalogue", "Catalogue sync", "catalogue", "kg_catalogue_sync_interval"),
+        _health("inventory", "Inventory sync", "inventory", "kg_inventory_sync_interval"),
+    ],
 }
