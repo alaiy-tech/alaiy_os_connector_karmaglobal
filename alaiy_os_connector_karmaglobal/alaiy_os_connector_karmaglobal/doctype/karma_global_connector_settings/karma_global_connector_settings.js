@@ -29,6 +29,7 @@ frappe.ui.form.on("Karma Global Connector Settings", {
 		for (const [label, method] of [
 			[__("Sync Catalogue"), "trigger_catalogue_sync"],
 			[__("Sync Inventory"), "trigger_inventory_sync"],
+			[__("Sync Invoices"), "trigger_invoices_sync"],
 		]) {
 			frm.add_custom_button(
 				label,

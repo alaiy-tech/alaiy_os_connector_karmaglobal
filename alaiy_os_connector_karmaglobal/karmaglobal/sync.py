@@ -120,6 +120,13 @@ def run_inventory_sync(trigger="scheduled", log_name=None):
     _run("inventory", trigger, log_name, worker)
 
 
+def run_invoices_sync(trigger="scheduled", log_name=None):
+    """Karma's invoices and payments for open Purchase Orders, carried onto their Purchase Invoices."""
+    from alaiy_os_connector_karmaglobal.karmaglobal import invoices
+
+    _run("invoices", trigger, log_name, lambda log, client, since: invoices.sync(log, client))
+
+
 def size_records(product):
     specs = {"Parent SKU": product["karma_sku"]}
     for key, label in (("color", "Color"), ("country_of_origin", "Country of Origin"), ("description", "Description")):

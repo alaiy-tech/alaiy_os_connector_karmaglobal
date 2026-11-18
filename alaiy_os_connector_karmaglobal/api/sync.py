@@ -30,6 +30,11 @@ def trigger_inventory_sync():
 
 
 @frappe.whitelist()
+def trigger_invoices_sync():
+    return _trigger("invoices")
+
+
+@frappe.whitelist()
 def get_sync_status(sync_type=None):
     """Latest logs; the connector card passes its slot name ("categories" / "items")."""
     filters = {}
