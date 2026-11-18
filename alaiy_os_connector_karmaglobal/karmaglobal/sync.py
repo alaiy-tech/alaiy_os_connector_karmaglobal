@@ -11,6 +11,14 @@ from frappe.utils import add_to_date, flt, now_datetime
 
 from alaiy_os_connector_karmaglobal.karmaglobal.client import KarmaClient
 
+try:
+    from alaiy_os.health.runs import run_status
+except ImportError:  # core without Connector Health: keep the old behaviour
+
+    def run_status(processed, failed, skipped=0, error=None):
+        return "success"
+
+
 LOG = "Karma Global Sync Log"
 CATALOGUE_PAGE = 50
 INVENTORY_PAGE = 1000
@@ -52,7 +60,9 @@ def _run(sync_type, trigger, log_name, worker):
     _save(log)
     try:
         worker(log, KarmaClient(), since)
-        log.status = "success"
+        log.status = run_status(log.items_processed, log.items_failed, 0, log.error_message)
+        if log.status == "failed" and not log.error_message:
+            log.error_message = f"Every item failed ({log.items_failed}); see the log."
     except Exception:
         log.status = "failed"
         log.error_message = frappe.get_traceback()[:2000]
