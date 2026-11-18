@@ -7,7 +7,7 @@ _LOG_FIELDS = {
 }
 
 
-def _health(key, label, sync_type, interval_setting):
+def _health(key, label, sync_type, interval_setting, expects_rows=True):
     return {
         "key": key,
         "label": label,
@@ -17,7 +17,7 @@ def _health(key, label, sync_type, interval_setting):
         "fields": _LOG_FIELDS,
         "interval_setting": interval_setting,
         "scheduled": True,
-        "expects_rows": True,
+        "expects_rows": expects_rows,
     }
 
 
@@ -26,7 +26,7 @@ connector_meta = {
     "connector_name": "Karma Global",
     "connector_app": "alaiy_os_connector_karmaglobal",
     "connector_type": "supplier",
-    "description": "Pulls Karma Global's catalogue and stock into Supplier Products, checks live stock and places drop-ship orders.",
+    "description": "Pulls Karma Global's catalogue and stock into Supplier Products, checks live stock, places drop-ship orders and records Karma's invoices and payments against them.",
     "icon": "shirt",
     "icon_url": "",
     "settings_doctype": "Karma Global Connector Settings",
@@ -41,5 +41,7 @@ connector_meta = {
     "health": [
         _health("catalogue", "Catalogue sync", "catalogue", "kg_catalogue_sync_interval"),
         _health("inventory", "Inventory sync", "inventory", "kg_inventory_sync_interval"),
+        # No open Karma orders is a normal run with nothing to read.
+        _health("invoices", "Invoice sync", "invoices", "kg_invoice_sync_interval", expects_rows=False),
     ],
 }

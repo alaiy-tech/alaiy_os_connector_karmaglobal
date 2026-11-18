@@ -13,7 +13,10 @@
   "kg_supplier",
   "sb_schedule",
   "kg_catalogue_sync_interval",
-  "kg_inventory_sync_interval"
+  "kg_inventory_sync_interval",
+  "kg_invoice_sync_interval",
+  "sb_invoices",
+  "kg_payment_account"
  ],
  "fields": [
   {
@@ -76,10 +79,31 @@
    "label": "Inventory Sync Interval",
    "options": "Disabled\n5 min\n15 min\n30 min\n60 min\nDaily",
    "reqd": 1
+  },
+  {
+   "default": "60 min",
+   "description": "Karma's invoices and payments for open Purchase Orders.",
+   "fieldname": "kg_invoice_sync_interval",
+   "fieldtype": "Select",
+   "label": "Invoice Sync Interval",
+   "options": "Disabled\n5 min\n15 min\n30 min\n60 min\nDaily",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sb_invoices",
+   "fieldtype": "Section Break",
+   "label": "Invoices and Payments"
+  },
+  {
+   "description": "Account a payment Karma records is paid from. Empty: the company's default bank or cash account.",
+   "fieldname": "kg_payment_account",
+   "fieldtype": "Link",
+   "label": "Payment Account",
+   "options": "Account"
   }
  ],
  "links": [],
- "modified": "2026-07-20 00:00:00.000000",
+ "modified": "2026-11-18 16:45:00.000000",
  "modified_by": "Administrator",
  "module": "Alaiy Os Connector Karmaglobal",
  "name": "Karma Global Connector Settings",

@@ -22,6 +22,7 @@ def check_and_enqueue():
 
     _maybe_enqueue("catalogue", settings.kg_catalogue_sync_interval)
     _maybe_enqueue("inventory", settings.kg_inventory_sync_interval)
+    _maybe_enqueue("invoices", settings.kg_invoice_sync_interval)
 
 
 def _maybe_enqueue(sync_type, interval):
