@@ -99,25 +99,47 @@ def run_inventory_sync(trigger="scheduled", log_name=None):
 
     def worker(log, client, since):
         known = get_existing_names(client.supplier)
+        sizes = {}
+        currency = None
         start = 0
         while True:
             page = client.call("get_inventory", {"start": start, "page_length": INVENTORY_PAGE})
-            _upsert(
-                log,
-                client.supplier,
-                [
-                    _priced({"supplier_product_id": i["karma_sku"], "supplier_stock": flt(i["stock_qty"])}, i, page["currency"])
-                    for i in page["items"]
-                    if i["karma_sku"] in known
-                ],
-            )
+            merge_inventory(sizes, page["items"], known)
+            currency = page["currency"]
             log.pages_done += 1
             _save(log)
             if len(page["items"]) < INVENTORY_PAGE:
                 break
             start += INVENTORY_PAGE
+        # Written once every page is read, so a size listed on two pages is still one record.
+        _upsert(
+            log,
+            client.supplier,
+            [
+                _priced({"supplier_product_id": sku, "supplier_stock": row["stock_qty"]}, row, currency)
+                for sku, row in sizes.items()
+            ],
+        )
 
     _run("inventory", trigger, log_name, worker)
+
+
+def merge_inventory(sizes, items, known):
+    """Add get_inventory rows to `sizes`, one entry per size already pulled.
+
+    get_inventory lists some sizes more than once, with stock in one row and 0 in the other.
+    Commerce takes one row per size in a call and rejects the repeats, so the rows are merged
+    first: the stock is the sum of the rows, and the price is the first one above 0.
+    """
+    for item in items:
+        sku = item["karma_sku"]
+        if sku not in known:
+            continue
+        row = sizes.setdefault(sku, {"stock_qty": 0.0, "billing_price": 0.0})
+        row["stock_qty"] += flt(item["stock_qty"])
+        if row["billing_price"] <= 0 < flt(item["billing_price"]):
+            row["billing_price"] = flt(item["billing_price"])
+    return sizes
 
 
 def run_invoices_sync(trigger="scheduled", log_name=None):

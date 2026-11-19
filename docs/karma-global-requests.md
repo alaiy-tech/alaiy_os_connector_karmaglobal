@@ -66,6 +66,10 @@ Item.
    - an hourly live stock check for curated products, in batches of 25;
    - a daily full catalogue pull;
    - a live stock check per order.
+6. **Sizes listed twice in `get_inventory`.** Some sizes come back as two rows in the same page, with the
+   same `billing_price`, stock in one row and 0 in the other. Why, and should the stock be added up across
+   the rows (one row per stock location, say), or is one row stale? The inventory sync adds them up today,
+   which matches every repeat seen so far. Please also say whether `check_stock` can list a size twice.
 
 ## 4. Where Karma's own pricing runs
 
